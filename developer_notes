@@ -53,7 +53,8 @@ Jon's 'in-motion' Developer Notes
     >> Docker Image?
 
 -------
-- Used Pandas to clean the data, removed all NaN.
+- Used Pandas to clean the data, removed all NaN, convert data types to float and timestamp from str.
+
 - Install TimeScale on MacOS, https://docs.timescale.com/latest/getting-started
     # Add our tap
     brew tap timescale/tap
@@ -97,7 +98,9 @@ Jon's 'in-motion' Developer Notes
     - To create a hypertable, you start with a regular SQL table, and then convert it into a hypertable via the function create_hypertable.
     - Implemented in Code...
 
-- 
+- Inserterd the cleaned dataframe into the db table with pandas.to_sql: https://pythontic.com/pandas/serialization/postgresql
+- Confirmed correct datatypes are saved and data is in created table
+
 
 
 
