@@ -1,0 +1,153 @@
+Jon's 'in-motion' Developer Notes
+---------------------------------
+
+- Started with what I did not recognise: gRPC
+    - Watched a few intro videos
+    - Read the docs.
+        gRPC
+        - Google uses internally as well as externally for pub/sub
+        - Netflix
+        - Square (contributor and used to replace their APIs)
+        - CoreOS
+        - CockroachDB
+        ‘Future’ of micro-services API, mobile-server API, and maybe web APIs
+        RPC = Remote Procedure Call
+        Allows a client to make a server call and it syntactically appears to be direct 
+        - Define the messages and services using ‘Protocol Buffers’
+            - Protocol Buffers are language agnostic, efficient for small payloads, convenient for transporting a lot of data and allows easy evolution of API with rules.
+        .proto file is the protocol configuration file
+
+- Inspected the data
+    - Noticed a NaN
+
+- Drew a mind-map of elements, languages and frameworks expected
+
+- Asked about the final product desired via email (UI and Data Presentation)
+
+- Created a GitHub Repo
+
+- Set up local dev env - inc. venv.
+
+-------
+- Rough Plan:
+    - Python / Pandas to clean CSV on server side. 
+    - Implement Timescale
+        - Insert clean data
+        - Create first query: return all data.
+    - Create Flask Server (dev)
+    - Implement gRPC Server side
+    - Implement gRPC Client within Flask Server
+    - Implement Return all data over gRPC
+    - Create GET Route on Flask Server - connecting to gRPC method
+    - Test GET route with Postman
+    - Create basic HTML page to display all data.
+    ** Test each element along the way
+    ** Utilise Branching Model where appropriate
+
+    ** Some new things here, so start simple, don't over-engineer - do write clean minimal code.
+       Revisit containerisation following POC
+
+    Beyond POC 
+    >> Implement additional data queries / manipulation
+    >> Enhance UI
+    >> Docker Image?
+
+-------
+- Used Pandas to clean the data, removed all NaN, convert data types to float and timestamp from str.
+
+- Install TimeScale on MacOS, https://docs.timescale.com/latest/getting-started
+    # Add our tap
+    brew tap timescale/tap
+
+    # To install
+    brew install timescaledb
+
+    # Post-install to move files to appropriate place
+    /usr/local/bin/timescaledb_move.sh
+
+    timescaledb-tune
+    timescaledb_move.sh
+
+    # Restart PostgreSQL instance
+    brew services restart postgresql
+
+    # Add a superuser postgres:
+    createuser postgres -s
+
+    # Connect to PostgreSQL, using a superuser named 'postgres'
+    psql -U postgres -h localhost
+
+    -- Create the database
+    CREATE database meterusage;
+
+    -- Connect to the database
+    \c meterusage
+
+    -- Extend the database with TimescaleDB
+    CREATE EXTENSION IF NOT EXISTS timescaledb CASCADE;
+
+    *** Connect to the new database ***
+    psql -U postgres -h localhost -d meterusage
+
+
+- Python TimeScale QuickStart Offical Tutorial https://docs.timescale.com/latest/tutorials/quickstart-python
+- Install psycopg2 : Psycopg is the most popular PostgreSQL database adapter for the Python programming language. https://pypi.org/project/psycopg2/
+    pip install psycopg2-binary
+
+    - Create a HyperTable (from Scratch) https://docs.timescale.com/latest/getting-started/creating-hypertables
+    - To create a hypertable, you start with a regular SQL table, and then convert it into a hypertable via the function create_hypertable.
+    - Implemented in Code...
+
+- Inserterd the cleaned dataframe into the db table with pandas.to_sql: https://pythontic.com/pandas/serialization/postgresql
+    - Using SQLAlchemy: https://docs.sqlalchemy.org/en/13/core/engines.html#postgresql
+- Confirmed correct datatypes are saved and data is in created table
+
+
+
+
+
+An introduction to gRPC and protocol buffers.
+https://grpc.io/docs/what-is-grpc/introduction/
+
+
+
+
+TIMESCALE INSTALL CLI Records for reference >> use later for Docker build?:
+==> timescaledb
+RECOMMENDED: Run 'timescaledb-tune' to update your config settings for TimescaleDB.
+
+  timescaledb-tune --quiet --yes
+
+IF NOT, you'll need to make sure to update /usr/local/var/postgres/postgresql.conf
+to include the extension:
+
+  shared_preload_libraries = 'timescaledb'
+
+To finish the installation, you will need to run:
+
+  timescaledb_move.sh
+
+If PostgreSQL is installed via Homebrew, restart it:
+
+  brew services restart postgresql
+
+Moving files into place...
+Success.
+ jongillespie@jg-mbp  ~  timescaledb-tune                                                                                                                                                   ✔  841  16:03:18
+Using postgresql.conf at this path:
+/usr/local/var/postgres/postgresql.conf
+
+Is this correct? [(y)es/(n)o]: y
+Writing backup to:
+/var/folders/21/ntgjmpl10jd6rzpzy_2z3m580000gn/T/timescaledb_tune.backup202008071604
+
+shared_preload_libraries needs to be updated
+Current:
+#shared_preload_libraries = ''
+Recommended:
+shared_preload_libraries = 'timescaledb'
+Is this okay? [(y)es/(n)o]: y
+success: shared_preload_libraries will be updated
+
+Tune memory/parallelism/WAL and other settings? [(y)es/(n)o]: n
+Saving changes to: /usr/local/var/postgres/postgresql.conf
