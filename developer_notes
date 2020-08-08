@@ -99,6 +99,7 @@ Jon's 'in-motion' Developer Notes
     - Implemented in Code...
 
 - Inserterd the cleaned dataframe into the db table with pandas.to_sql: https://pythontic.com/pandas/serialization/postgresql
+    - Using SQLAlchemy: https://docs.sqlalchemy.org/en/13/core/engines.html#postgresql
 - Confirmed correct datatypes are saved and data is in created table
 
 

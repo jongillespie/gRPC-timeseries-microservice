@@ -17,6 +17,11 @@ db_table_name = 'meter_usage'
 # Connect to the database
 CONNECTION = f"postgres://postgres:None@localhost:5432/meterusage"
 # TODO Set password, amend all to be .env Vars.
+# conn = psycopg2.connect(dbname='my-db-name',
+#                         user='postgres',
+#                         password='super-secret',
+#                         host='localhost',
+#                         port='5432')
 # CONNECTION = f"dbname={os.getenv('DBNAME')} user={os.getenv('DBUSER')} host=localhost port=5432 connect_timeout=10" # sslmode=require password=secret"
 # CONNECTION = f"postgres://{os.getenv('DBUSER')}:{os.getenv('DBPASS')}@{os.getenv('DBHOST')}:{os.getenv('DBPORT')}/{os.getenv('DBNAME')}"
 db_connection = psycopg2.connect(CONNECTION)
@@ -25,12 +30,15 @@ alchemy_engine = create_engine(CONNECTION)
 postgreSQLConnection = alchemy_engine.connect()
 
 
-def db_cursor_execute(queries, is_multiple_queries=False):
+def _db_cursor_execute(queries, is_multiple_queries=False, is_expecting_results=False):
     """Timescale Cursor Method for executing one or more queries.
 
     Args:
         queries ([list]): [List of SQL queries to execute]
         multiple_queries (bool, optional): [flag for single vs. multiple queries in above list]. Defaults to False.
+
+    Returns:
+        [#TODO]: [Query results from the database]
     """
 
     try:
@@ -38,19 +46,29 @@ def db_cursor_execute(queries, is_multiple_queries=False):
         print("> DB Cursor activated")
         if is_multiple_queries:
             for query in queries:
-                print("> Running Query: ", query)
+                print("> Running Queries: ", query)
                 cursor.execute(query)
         else:
+            print("> Running Query: ", queries)
             cursor.execute(queries)
         print("> Committing to DB")
         db_connection.commit()
+        if is_expecting_results:
+            results = cursor.fetchall()
+            print("> Closing Cursor Connection")
+            cursor.close()
+            return results
+        else: 
+            print("> Closing Cursor Connection")
+            cursor.close()
+            return
     except (Exception, psycopg2.Error) as error:        
         print(error.pgerror)
-    print("> Closing Cursor Connection")
-    cursor.close()
+        db_connection.rollback()
+        cursor.close()
 
 
-def create_meterusage_hypertable():
+def _create_meterusage_hypertable():
     """Initialises the 'meterusage' hypertable within the TimescaleDB 
     """    
     
@@ -60,10 +78,10 @@ def create_meterusage_hypertable():
                                             );"""
     query_create_meterusage_hypertable = f"SELECT create_hypertable ('{db_table_name}', 'time');"
     queries = [query_create_meterusage_table, query_create_meterusage_hypertable]
-    db_cursor_execute(queries, is_multiple_queries=True)
+    _db_cursor_execute(queries, is_multiple_queries=True, is_expecting_results=False)
 
 
-def insert_cleaned_meterusage_data():
+def _insert_cleaned_meterusage_data():
     """Inserts all of the meterusage data provided by the original CSV, cleaned via pandas dataframe
     """    
 
@@ -79,9 +97,19 @@ def insert_cleaned_meterusage_data():
         print(ex)
 
 
+def get_all_data():
+    """Returns all data from the meter_usage hypertable
+    """
 
-create_meterusage_hypertable()
-insert_cleaned_meterusage_data()
+    query_get_all_data = f"SELECT * FROM {db_table_name};"
+    results = _db_cursor_execute(query_get_all_data, is_multiple_queries=False, is_expecting_results=True)
+    for result in results:
+        print(result)
+
+
+_create_meterusage_hypertable()
+_insert_cleaned_meterusage_data()
+get_all_data()
 
 
 # get_all = f"SELECT * FROM {db_table_name}"
