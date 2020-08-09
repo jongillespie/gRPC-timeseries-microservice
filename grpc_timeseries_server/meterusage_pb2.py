@@ -11,6 +11,7 @@ from google.protobuf import symbol_database as _symbol_database
 _sym_db = _symbol_database.Default()
 
 
+from google.protobuf import timestamp_pb2 as google_dot_protobuf_dot_timestamp__pb2
 
 
 DESCRIPTOR = _descriptor.FileDescriptor(
@@ -19,8 +20,9 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x10meterusage.proto\x12\nmeterusage\"<\n\x11\x41llRecordsRequest\x12\x11\n\tclient_id\x18\x01 \x01(\x03\x12\x14\n\x0crequest_data\x18\x02 \x01(\t\">\n\x12\x41llRecordsResponse\x12\x11\n\tserver_id\x18\x01 \x01(\x03\x12\x15\n\rresponse_data\x18\x02 \x01(\t2\\\n\nMeterUsage\x12N\n\rGetAllRecords\x12\x1d.meterusage.AllRecordsRequest\x1a\x1e.meterusage.AllRecordsResponseb\x06proto3'
-)
+  serialized_pb=b'\n\x10meterusage.proto\x12\nmeterusage\x1a\x1fgoogle/protobuf/timestamp.proto\"<\n\x11\x41llRecordsRequest\x12\x11\n\tclient_id\x18\x01 \x01(\x03\x12\x14\n\x0crequest_data\x18\x02 \x01(\t\"R\n\x12\x41llRecordsResponse\x12(\n\x04time\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x12\n\nmeterusage\x18\x02 \x01(\x02\x32^\n\nMeterUsage\x12P\n\rGetAllRecords\x12\x1d.meterusage.AllRecordsRequest\x1a\x1e.meterusage.AllRecordsResponse0\x01\x62\x06proto3'
+  ,
+  dependencies=[google_dot_protobuf_dot_timestamp__pb2.DESCRIPTOR,])
 
 
 
@@ -59,8 +61,8 @@ _ALLRECORDSREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=32,
-  serialized_end=92,
+  serialized_start=65,
+  serialized_end=125,
 )
 
 
@@ -73,16 +75,16 @@ _ALLRECORDSRESPONSE = _descriptor.Descriptor(
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='server_id', full_name='meterusage.AllRecordsResponse.server_id', index=0,
-      number=1, type=3, cpp_type=2, label=1,
-      has_default_value=False, default_value=0,
+      name='time', full_name='meterusage.AllRecordsResponse.time', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='response_data', full_name='meterusage.AllRecordsResponse.response_data', index=1,
-      number=2, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
+      name='meterusage', full_name='meterusage.AllRecordsResponse.meterusage', index=1,
+      number=2, type=2, cpp_type=6, label=1,
+      has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
@@ -98,10 +100,11 @@ _ALLRECORDSRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=94,
-  serialized_end=156,
+  serialized_start=127,
+  serialized_end=209,
 )
 
+_ALLRECORDSRESPONSE.fields_by_name['time'].message_type = google_dot_protobuf_dot_timestamp__pb2._TIMESTAMP
 DESCRIPTOR.message_types_by_name['AllRecordsRequest'] = _ALLRECORDSREQUEST
 DESCRIPTOR.message_types_by_name['AllRecordsResponse'] = _ALLRECORDSRESPONSE
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
@@ -129,8 +132,8 @@ _METERUSAGE = _descriptor.ServiceDescriptor(
   index=0,
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_start=158,
-  serialized_end=250,
+  serialized_start=211,
+  serialized_end=305,
   methods=[
   _descriptor.MethodDescriptor(
     name='GetAllRecords',

@@ -11,7 +11,7 @@ def clean_csv():
         [Pandas Dataframe]: [Contains clean records, no NaN]
     """
     # Directly import the local CSV file as type String
-    df = pd.read_csv(f"grpc_timeseries_server/meterusage.csv", dtype=str)
+    df = pd.read_csv(f"meterusage.csv", dtype=str)
     # Confirm dataframe created, its shape and the meterusage column's type
     # print(df)
     # print(df.shape)

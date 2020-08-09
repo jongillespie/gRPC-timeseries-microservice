@@ -128,6 +128,12 @@ Purpose: to document development, links to resources, and provide insight into J
 
 - Protocol Buffers Language Guide (proto3): https://developers.google.com/protocol-buffers/docs/proto3
 - Simple request response gRPC implemented utilising one of their examples: https://github.com/grpc/grpc/tree/master/examples/python/data_transmission
+- Proto upgraded to Server Stream - will send each timeseries entry within it
+- Changed values of Response method to protobuf's timestamp and a float
+- Conversion between datetime and timestamps important
+- Tested the server and client - client reconverts and can display meterusage entries
+
+* > Dates are incorrect - showing as 1970... something with EPOCH converstion?
 
 
 

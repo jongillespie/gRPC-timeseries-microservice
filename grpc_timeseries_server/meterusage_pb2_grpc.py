@@ -15,7 +15,7 @@ class MeterUsageStub(object):
         Args:
             channel: A grpc.Channel.
         """
-        self.GetAllRecords = channel.unary_unary(
+        self.GetAllRecords = channel.unary_stream(
                 '/meterusage.MeterUsage/GetAllRecords',
                 request_serializer=meterusage__pb2.AllRecordsRequest.SerializeToString,
                 response_deserializer=meterusage__pb2.AllRecordsResponse.FromString,
@@ -38,7 +38,7 @@ class MeterUsageServicer(object):
 
 def add_MeterUsageServicer_to_server(servicer, server):
     rpc_method_handlers = {
-            'GetAllRecords': grpc.unary_unary_rpc_method_handler(
+            'GetAllRecords': grpc.unary_stream_rpc_method_handler(
                     servicer.GetAllRecords,
                     request_deserializer=meterusage__pb2.AllRecordsRequest.FromString,
                     response_serializer=meterusage__pb2.AllRecordsResponse.SerializeToString,
@@ -65,7 +65,7 @@ class MeterUsage(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/meterusage.MeterUsage/GetAllRecords',
+        return grpc.experimental.unary_stream(request, target, '/meterusage.MeterUsage/GetAllRecords',
             meterusage__pb2.AllRecordsRequest.SerializeToString,
             meterusage__pb2.AllRecordsResponse.FromString,
             options, channel_credentials,

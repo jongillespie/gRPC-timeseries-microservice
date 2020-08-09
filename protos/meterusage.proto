@@ -13,6 +13,8 @@
 // limitations under the License.
 syntax = "proto3";
 
+import "google/protobuf/timestamp.proto";
+
 package meterusage;
 
 // Interface exported by the server.
@@ -20,7 +22,7 @@ service MeterUsage {
   // Simple RPC - a request gets a response.
   //
   // Returns all the data within the meterusage timeseries db.
-  rpc GetAllRecords (AllRecordsRequest) returns (AllRecordsResponse);
+  rpc GetAllRecords (AllRecordsRequest) returns (stream AllRecordsResponse);
 }
 
 // The request message indicating all data required..
@@ -31,9 +33,9 @@ message AllRecordsRequest {
 
 // The response message containing the meterusage data
 message AllRecordsResponse {
-  int64 server_id = 1;
-  string response_data = 2;
+  google.protobuf.Timestamp time = 1;
+  float meterusage = 2;
 }
 
-// TODO Generate from within venv and proto folder...
+// TODO on Updates: Generate from within venv and proto folder...
 // > python -m grpc_tools.protoc --proto_path=. --python_out=. --grpc_python_out=. meterusage.proto
