@@ -35,10 +35,11 @@ def _db_cursor_execute(queries, is_multiple_queries=False, is_expecting_results=
 
     Args:
         queries ([list]): [List of SQL queries to execute]
-        multiple_queries (bool, optional): [flag for single vs. multiple queries in above list]. Defaults to False.
+        is_multiple_queries (bool, optional): [flag for single vs. multiple queries in above list]. Defaults to False.
+        is_expecting_results (bool, optional): [flag for the cursor to return results or none]. Defaults to False.
 
     Returns:
-        [#TODO]: [Query results from the database]
+        [DBrecords]: [Query results from the database]
     """
 
     try:
@@ -46,7 +47,7 @@ def _db_cursor_execute(queries, is_multiple_queries=False, is_expecting_results=
         print("> DB Cursor activated")
         if is_multiple_queries:
             for query in queries:
-                print("> Running Queries: ", query)
+                print("> Running Query: ", query)
                 cursor.execute(query)
         else:
             print("> Running Query: ", queries)
@@ -103,14 +104,11 @@ def get_all_data():
 
     query_get_all_data = f"SELECT * FROM {db_table_name};"
     results = _db_cursor_execute(query_get_all_data, is_multiple_queries=False, is_expecting_results=True)
-    for result in results:
-        print(result)
+    print("TYPE: ", type(results))
+    # for result in results:
+    #     print(result)
 
 
 _create_meterusage_hypertable()
 _insert_cleaned_meterusage_data()
 get_all_data()
-
-
-# get_all = f"SELECT * FROM {db_table_name}"
-# db_cursor_execute([get_all])

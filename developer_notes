@@ -1,5 +1,6 @@
 Jon's 'in-motion' Developer Notes
 ---------------------------------
+Purpose: to document development, links to resources, and provide insight into Jon's process.
 
 - Started with what I did not recognise: gRPC
     - Watched a few intro videos
@@ -89,7 +90,7 @@ Jon's 'in-motion' Developer Notes
     *** Connect to the new database ***
     psql -U postgres -h localhost -d meterusage
 
-
+>> grpc_server.py & clean_csv_data.py
 - Python TimeScale QuickStart Offical Tutorial https://docs.timescale.com/latest/tutorials/quickstart-python
 - Install psycopg2 : Psycopg is the most popular PostgreSQL database adapter for the Python programming language. https://pypi.org/project/psycopg2/
     pip install psycopg2-binary
@@ -101,13 +102,41 @@ Jon's 'in-motion' Developer Notes
 - Inserterd the cleaned dataframe into the db table with pandas.to_sql: https://pythontic.com/pandas/serialization/postgresql
     - Using SQLAlchemy: https://docs.sqlalchemy.org/en/13/core/engines.html#postgresql
 - Confirmed correct datatypes are saved and data is in created table
+- Created a get all query
+- Enhanced the execution tool to faciliatate single or multiple queries
+
+>> focus: grpc
+- An introduction to gRPC and protocol buffers. https://grpc.io/docs/what-is-grpc/introduction/
+- A client application can directly call a method on a server application on a different machine as if it were a local object
+- gRPC uses Protocol Buffers, Google’s mature open source mechanism for serializing structured data (although it can be used with other data formats such as JSON).
+- the idea of defining a service, specifying the methods that can be called remotely with their parameters and return types.
+* - 4 Service types
+      - Unary RPCs                  eg: rpc SayHello(HelloRequest) returns (HelloResponse);
+      - Server Streaming                rpc LotsOfReplies(HelloRequest) returns (stream HelloResponse);
+      - Client Streaming                rpc LotsOfGreetings(stream HelloRequest) returns (HelloResponse);
+      - Bi-directional Streaming        rpc BidiHello(stream HelloRequest) returns (stream HelloResponse);
+- gRPC programming API in most languages comes in both synchronous and asynchronous flavors.
+- With gRPC we can define our service once in a .proto file and generate clients and servers
+
+- Install gRPC 
+
+    pip install grpcio
+    pip install grpcio-tools
+
+    To generate the files from the proto::: tested and works - correct paths.
+      > python -m grpc_tools.protoc --proto_path=. --python_out=. --grpc_python_out=. meterusage.proto
+
+- Protocol Buffers Language Guide (proto3): https://developers.google.com/protocol-buffers/docs/proto3
+- Simple request response gRPC implemented utilising one of their examples: https://github.com/grpc/grpc/tree/master/examples/python/data_transmission
 
 
 
 
 
-An introduction to gRPC and protocol buffers.
-https://grpc.io/docs/what-is-grpc/introduction/
+
+
+
+
 
 
 
