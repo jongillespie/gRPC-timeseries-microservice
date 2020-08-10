@@ -35,31 +35,32 @@ def _db_cursor_execute(queries, is_multiple_queries=False, is_expecting_results=
 
     Args:
         queries ([list]): [List of SQL queries to execute]
-        multiple_queries (bool, optional): [flag for single vs. multiple queries in above list]. Defaults to False.
+        is_multiple_queries (bool, optional): [flag for single vs. multiple queries in above list]. Defaults to False.
+        is_expecting_results (bool, optional): [flag for the cursor to return results or none]. Defaults to False.
 
     Returns:
-        [#TODO]: [Query results from the database]
+        [DBrecords]: [Query results from the database]
     """
 
     try:
         cursor = db_connection.cursor()
-        print("> DB Cursor activated")
+        print("timescale_helper    | > DB Cursor activated")
         if is_multiple_queries:
             for query in queries:
-                print("> Running Queries: ", query)
+                print("timescale_helper    | > Running Query: ", query)
                 cursor.execute(query)
         else:
-            print("> Running Query: ", queries)
+            print("timescale_helper    | > Running Query: ", queries)
             cursor.execute(queries)
-        print("> Committing to DB")
+        print("timescale_helper    | > Committing to DB")
         db_connection.commit()
         if is_expecting_results:
             results = cursor.fetchall()
-            print("> Closing Cursor Connection")
+            print("timescale_helper    | > Closing Cursor Connection")
             cursor.close()
             return results
         else: 
-            print("> Closing Cursor Connection")
+            print("timescale_helper    | > Closing Cursor Connection")
             cursor.close()
             return
     except (Exception, psycopg2.Error) as error:        
@@ -85,11 +86,11 @@ def _insert_cleaned_meterusage_data():
     """Inserts all of the meterusage data provided by the original CSV, cleaned via pandas dataframe
     """    
 
-    print('> Cleaning CSV Data via Dataframe')
+    print('timescale_helper    | > Cleaning CSV Data via Dataframe')
     cleaned_data = clean_csv_data.clean_csv()
     # cleaned_data.to_sql(name=f'{db_table_name}', con=db_connection, schema='postgres', if_exists='replace', index=False)
     try:
-        print('> Translating Dataframe into Database')
+        print('timescale_helper    | > Translating Dataframe into Database')
         cleaned_data.to_sql(db_table_name, postgreSQLConnection, if_exists='replace')
     except ValueError as vx:
         print(vx)
@@ -101,16 +102,12 @@ def get_all_data():
     """Returns all data from the meter_usage hypertable
     """
 
-    query_get_all_data = f"SELECT * FROM {db_table_name};"
-    results = _db_cursor_execute(query_get_all_data, is_multiple_queries=False, is_expecting_results=True)
-    for result in results:
-        print(result)
+    # query_get_all_data = f"SELECT * FROM {db_table_name};"
+    query_get_all_data = f"SELECT time, meterusage FROM {db_table_name};"
+    results_raw = _db_cursor_execute(query_get_all_data, is_multiple_queries=False, is_expecting_results=True)
+    return results_raw
 
 
 _create_meterusage_hypertable()
 _insert_cleaned_meterusage_data()
-get_all_data()
-
-
-# get_all = f"SELECT * FROM {db_table_name}"
-# db_cursor_execute([get_all])
+# get_all_data()
