@@ -20,9 +20,13 @@ The front end was first developed using Flask but had countless issues, after ma
 Django was then selected and functions as intended, displaying the data in a JSONResponse UI via the localendpoint: 127.0.0.1:8000/meterusage 
 The Django project is in "meterusagefrontend".
 
+- venv was utilised for dev and the requirements.txt doc is up to date but still includes Flask et al. 
+
+An image of the gRCP/Timescale Server CLI's prints:
+![Server Timescale Image](timescale.png)
+
 An image of the final representation of the Data in the JSONResponse:
 ![JSON MeterUsage Data](json.png)
-Format: ![Alt Text](url)
 
 * The proto file used is within 'protos' while the generated files were copied and exist in both the back and front end to simulate a seperation of concern (different repos in prod)
 * A production frontend server was not implemented, instead the built in Django development server was used for this challenge.
