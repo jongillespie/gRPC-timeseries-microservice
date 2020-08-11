@@ -16,14 +16,17 @@ import json
 
 import grpc
 
-import meterusage_pb2
-import meterusage_pb2_grpc
+from . import meterusage_pb2
+from . import meterusage_pb2_grpc
 
 SERVER_ADDRESS = "localhost:23333"
 CLIENT_ID = 1
 
 
-def get_all_records(stub):
+def get_all_records(channel):
+    # with grpc.insecure_channel(SERVER_ADDRESS) as channel:
+    stub = meterusage_pb2_grpc.MeterUsageStub(channel)
+    
     print("grpc_stub           | > Client's gRPC Stub requesting all MeterUsage Data...")
     request = meterusage_pb2.AllRecordsRequest( client_id=CLIENT_ID,
                                                 request_data="Provide All Records Please")
@@ -45,15 +48,15 @@ def get_all_records(stub):
 
         meterusage_data.update( {time: response.meterusage} )
 
-    meterusage_json = json.dumps(meterusage_data)
-    print(meterusage_json)
-    return meterusage_json
+    # meterusage_json = json.loads(meterusage_data)
+    # print(meterusage_json)
+    return meterusage_data
 
 
-def main():
-    with grpc.insecure_channel(SERVER_ADDRESS) as channel:
-        stub = meterusage_pb2_grpc.MeterUsageStub(channel)
-        get_all_records(stub)
+# def main():
+#     with grpc.insecure_channel(SERVER_ADDRESS) as channel:
+#         stub = meterusage_pb2_grpc.MeterUsageStub(channel)
+#         get_all_records(stub)
 
 
 # if __name__ == '__main__':
