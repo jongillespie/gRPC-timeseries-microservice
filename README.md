@@ -1,9 +1,9 @@
 # gRPC-timeseries-microservice
 
 
-Detailed development notes are captured in 'developer_notes' here:
+Detailed development notes are captured in 'developer_notes' here: https://github.com/jongillespie/gRPC-timeseries-microservice/blob/master/developer_notes
 
-In Brief
+## In Brief
 
 This MVP was developed as a challenge provided by Spectral to test backend developemnt skills. The purpose of the contained - is to ingest raw CSV data consisting of time and meterusage metrics, store this data in a timeseries DB and expose it with a gRPC server. Additionally, this server can be queried for all of the data (timestamp : float) via a Django frontend that then displays it in JSON format in a simple UI.
 
@@ -23,7 +23,7 @@ Django was then selected and functions as intended, displaying the data in a JSO
 * A production frontend server was not implemented, instead the built in Django development server ws used for this challenge.
 * .env was started for secure storage of keys/pass but not completed.
 
-Personal note:
+## Personal note:
 Timescale, gRPC and Django were all brand new to me for this challenge - there are likely some anti-patterns that I'd very much appreciate some guidance on. Thanks!
 
 
