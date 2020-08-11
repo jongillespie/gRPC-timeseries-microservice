@@ -14,6 +14,7 @@
 import datetime
 import json
 
+from google.protobuf.timestamp_pb2 import Timestamp
 import grpc
 
 from . import meterusage_pb2
@@ -24,35 +25,35 @@ CLIENT_ID = 1
 
 
 def get_all_records(channel):
-    # with grpc.insecure_channel(SERVER_ADDRESS) as channel:
     stub = meterusage_pb2_grpc.MeterUsageStub(channel)
     
     print("grpc_stub           | > Client's gRPC Stub requesting all MeterUsage Data...")
     request = meterusage_pb2.AllRecordsRequest( client_id=CLIENT_ID,
                                                 request_data="Provide All Records Please")
     response_iterator = stub.GetAllRecords(request)
-    print("grpc_stub           | > First 10 records are:")
-    range = 10
+    
+    # Display first 10 records to console: (*for CLI stub testing.)
+    # print("grpc_stub           | > First 10 records are:")
+    # range = 10
 
     # Prepare for JSON
     meterusage_data = {}
 
     for response in response_iterator:
-        # time = datetime.datetime.fromtimestamp(response.time)
-        time = str(response.time)
-
-        # Display first 10 records to console:
-        if range > 0:
-            print(str(time), str(response.meterusage))
-            range -= 1
-
+        # Convert the timestamp back into Datetime
+        time_raw = Timestamp.ToDatetime(response.time)
+        # Convert datetime into String for JSON display
+        time = str(time_raw)
+        # Display first 10 records to console: (*for CLI stub testing.)
+        # if range > 0:
+        #     print(str(time), str(response.meterusage))
+        #     range -= 1
         meterusage_data.update( {time: response.meterusage} )
 
-    # meterusage_json = json.loads(meterusage_data)
-    # print(meterusage_json)
     return meterusage_data
 
 
+# NOTE Below kept as reference for solo stub testing. DevNotes explains the change.
 # def main():
 #     with grpc.insecure_channel(SERVER_ADDRESS) as channel:
 #         stub = meterusage_pb2_grpc.MeterUsageStub(channel)
