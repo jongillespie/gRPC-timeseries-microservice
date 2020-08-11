@@ -90,8 +90,8 @@ if __name__ == "__main__":
 # #     return render_template('errors/404.html'), 404
 
 
-# if __name__ == '__main__':
-#     app.run(debug=True)
+if __name__ == '__main__':
+    app.run(debug=True)
 
 
 

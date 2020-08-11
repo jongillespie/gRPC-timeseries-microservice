@@ -26,10 +26,10 @@ SERVER_ID = 1
 
 
 class MeterUsage(meterusage_pb2_grpc.MeterUsageServicer):
-    """[summary]
+    """Creates a gRPC Server to provide MeterUsage Data
 
     Args:
-        meterusage_pb2_grpc ([type]): [description]
+        meterusage_pb2_grpc ([gRPC ProtoBuf]): [gRPC Auto-Gen'd Servicer]
     """
 
     def GetAllRecords(self, request, context):

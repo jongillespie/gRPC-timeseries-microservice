@@ -25,6 +25,15 @@ CLIENT_ID = 1
 
 
 def get_all_records(channel):
+    """Method to Connect with the gRPC Server and return meterusage data
+
+    Args:
+        channel ([gRPC Channel]): [The bound channel from the Django server]
+
+    Returns:
+        [Str]: [Meterusage data in a str formatted key value pair list]
+    """
+
     stub = meterusage_pb2_grpc.MeterUsageStub(channel)
     
     print("grpc_stub           | > Client's gRPC Stub requesting all MeterUsage Data...")

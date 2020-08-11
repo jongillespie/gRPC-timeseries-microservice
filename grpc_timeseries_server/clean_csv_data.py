@@ -5,7 +5,8 @@ import pandas as pd
 
 
 def clean_csv():
-    """[summary]
+    """Takes in the CSV Data file and cleans the meter data,
+    eliminating NaN Records via Pandas DataFrame
 
     Returns:
         [Pandas Dataframe]: [Contains clean records, no NaN]
