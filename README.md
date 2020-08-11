@@ -17,7 +17,12 @@ Note, the time in the DB is stored in timestamp/datetime format which is then co
 
 The front end was first developed using Flask but had countless issues, after many attempts with various methods (packages, reformatting code etc.) it forced a re-think of strategy. "grpc_client_flask_server" is thus NOT IN USE - however, was kept and committed as a record of the attempt.
 
-Django was then selected and functions as intended, displaying the data in a JSONResponse UI. The Django project is in "meterusagefrontend".
+Django was then selected and functions as intended, displaying the data in a JSONResponse UI via the localendpoint: 127.0.0.1:8000/meterusage 
+The Django project is in "meterusagefrontend".
+
+An image of the final representation of the Data in the JSONResponse:
+![JSON MeterUsage Data](json.png)
+Format: ![Alt Text](url)
 
 * The proto file used is within 'protos' while the generated files were copied and exist in both the back and front end to simulate a seperation of concern (different repos in prod)
 * A production frontend server was not implemented, instead the built in Django development server was used for this challenge.
