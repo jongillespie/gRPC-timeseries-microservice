@@ -15,6 +15,7 @@ from concurrent import futures
 
 import grpc
 from google.protobuf.timestamp_pb2 import Timestamp
+from datetime import datetime
 
 import meterusage_pb2
 import meterusage_pb2_grpc
@@ -25,6 +26,11 @@ SERVER_ID = 1
 
 
 class MeterUsage(meterusage_pb2_grpc.MeterUsageServicer):
+    """[summary]
+
+    Args:
+        meterusage_pb2_grpc ([type]): [description]
+    """
 
     def GetAllRecords(self, request, context):
         print("grpc_server         | > Incoming request from client_id:(%d) ... The Message: %s" % (request.client_id, request.request_data))
